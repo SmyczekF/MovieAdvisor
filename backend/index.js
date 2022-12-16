@@ -12,35 +12,43 @@ const db = mysql.createPool({
     database: 'movieadvisor'
 });
 
-PythonShell.run("./cinema-city-scrape.py", null, (err, res) => {
+const options = {
+    args: ["15"]
+}
+
+PythonShell.run("./cinema-city-scrape.py", options, (err, res) => {
     
-    console.log('ok')
-    // const sqlInsert = `insert into movies_cinemacity 
-    // (TITLE, MOVIE_LANGUAGE, DUBBING,
-    // SUBTITLES, GENRE, MOVIE_CAST, MOVIE_DIRECTOR, MOVIE_DATE, 
-    // MOVIE_LENGTH, VIEWER_AGE, PRODUCTION_COUNTRY,
-    // PRODUCTION_YEAR, MOVIE_DESCRIPTION) 
-    // values 
-    // (
-    // 'tytul', 
-    // 'pl',
-    // false,
-    // false,
-    // 'komedia',
-    // 'brad pitt',
-    // 'robert',
-    // '2022-10-10 01:15:00',
-    // 120,
-    // 12,
-    // 'USA',
-    // '2022',
-    // 'description'
-    // )`
-    
-    // db.query(sqlInsert, (err, response) => {
-    //     console.log('ERROR: ' + err);
-    //     console.log('ODP: ' + response);
-    // })
+    res.forEach(el => {
+        const record = JSON.parse(el)
+        record.forEach(field => {
+            field['description'] = field['description'].replaceAll('"','\\"')
+
+            const sqlInsert = `insert into movies_cinemacity
+            values 
+            (
+            NULL,
+            "${field['title']}", 
+            "${field['original_lang']}",
+            ${field['dubbing']},
+            ${field['subtitles']},
+            "${field['movie_type']}",
+            "${field['genres']}",
+            "${field['cast']}",
+            "${field['director']}",
+            STR_TO_DATE('${field['date']}', '%d/%m/%Y %H:%i'),
+            "${field['length']}",
+            "${field['age']}",
+            "${field['description']}",
+            "${field['city']}",
+            STR_TO_DATE('${field['premiere']}', '%d %M %Y')
+            )`
+            
+            db.query(sqlInsert, (err, response) => {
+                console.log('ERROR: ' + err);
+                console.log('ODP: ' + response);
+            })
+        })  
+    })
 })
 
 app.use((req, res, next) => {
