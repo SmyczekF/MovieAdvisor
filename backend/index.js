@@ -12,48 +12,13 @@ const db = mysql.createPool({
     database: 'movieadvisor'
 });
 
-const options = {
-    args: ["15"]
-}
-
-PythonShell.run("./cinema-city-scrape.py", options, (err, res) => {
-    
-    res.forEach(el => {
-        const record = JSON.parse(el)
-        record.forEach(field => {
-            field['description'] = field['description'].replaceAll('"','\\"')
-
-            const sqlInsert = `insert into movies_cinemacity
-            values 
-            (
-            NULL,
-            "${field['title']}", 
-            "${field['original_lang']}",
-            ${field['dubbing']},
-            ${field['subtitles']},
-            "${field['movie_type']}",
-            "${field['genres']}",
-            "${field['cast']}",
-            "${field['director']}",
-            STR_TO_DATE('${field['date']}', '%d/%m/%Y %H:%i'),
-            "${field['length']}",
-            "${field['age']}",
-            "${field['description']}",
-            "${field['city']}",
-            STR_TO_DATE('${field['premiere']}', '%d %M %Y')
-            )`
-            
-            db.query(sqlInsert, (err, response) => {
-                console.log('ERROR: ' + err);
-                console.log('ODP: ' + response);
-            })
-        })  
-    })
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+    next();
 })
 
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    next();
+app.get('/api/cinema-city/add-movies', (req, res) => {
+    PythonShell.run("./cinema-city-scrape.py", null, (err, res) => console.log(res))
 })
 
 app.get('/api/get', (req, res) => {
@@ -62,11 +27,6 @@ app.get('/api/get', (req, res) => {
         res.send(result);
     })
 })
-
-// app.get('/api/insert', (req, res) => {
-    
-    
-// })
 
 app.get('/', (req, res) => {
     res.send('Hello Filip!')
