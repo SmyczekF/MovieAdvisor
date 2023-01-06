@@ -1,36 +1,72 @@
-.App {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-start;
-  margin: 2rem;
-  font-family: sans-serif;
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 }
 
-.App h1 {
-  font-size: 2rem;
-  margin: 1rem 0;
-  color: #333;
+:root{
+    --mainColor: #29335C;
+    --mainColorLight: #29455c;
+    --secondaryColor: #DB2B39;
+    --textColor: #eee;
 }
 
-.App h2 {
-  font-size: 1.5rem;
-  margin: 0.5rem 0;
-  color: #666;
+header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-content: space-between;
+    height: 80px;
+    padding: 0 2rem;
+    background-color: var(--mainColor);
+    color: -var(--textColor);
 }
 
-.movie-card {
-  width: 25%;
-  background-color: #fff;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  border-radius: 8px;
-  padding: 2rem;
-  margin: 2rem;
-  text-align: left;
+nav a{
+    margin: 0 2rem;
+    color: var(--textColor);
+    text-decoration: none;
 }
 
-.movie-card p {
-  font-size: 1.2rem;
-  margin: 0.5rem 0;
-  color: #999;
+nav a:hover{
+    color: var(--secondaryColor);
 }
+
+header .nav-btn{
+    padding: 5px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--textColor);
+    visibility: hidden;
+}
+
+@media only screen and (max-width: 1024px){
+    header .nav-btn{
+        visibility: visible;
+    }
+
+    header nav{
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        background-color: var(--mainColor);
+        transition: 1s;
+        transform: translateY(-100vh);
+        flex-direction: column;
+    }
+
+    header .responsive-nav{
+        transform: none;
+    }
+}
+
+    
+

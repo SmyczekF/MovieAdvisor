@@ -108,54 +108,52 @@ def goToDetails(link) -> dict:
 
     return result
 
-select_links = "SELECT ID, Link FROM links_cinemacity"
+select_links = "SELECT ID, Link FROM link_cinema WHERE Cinema like 'CinemaCity'"
 cursor_select.execute(select_links)
+day = date.today()
+day = day + timedelta(days = 1)
 
 for (idx, Link) in cursor_select:
-    day = date.today()
-    for i in range(1):
-        
-        date_now = day.strftime('%Y-%m-%d')
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    
+    date_now = day.strftime('%Y-%m-%d')
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-        driver.get(Link.replace("{date_now}", date_now))
+    driver.get(Link.replace("{date_now}", date_now))
 
-        links = WebDriverWait(driver, 10).until(EC.visibility_of_all_elements_located((By.CLASS_NAME, 'qb-movie-link')))
+    links = WebDriverWait(driver, 10).until(EC.visibility_of_all_elements_located((By.CLASS_NAME, 'qb-movie-link')))
 
-        elements = driver.find_elements(By.CLASS_NAME, 'qb-movie-name')
-        hours_all = driver.find_elements(By.CSS_SELECTOR, '.events.col-xs-12')
+    elements = driver.find_elements(By.CLASS_NAME, 'qb-movie-name')
+    hours_all = driver.find_elements(By.CSS_SELECTOR, '.events.col-xs-12')
 
-        for i in range(len(elements)):
-            result = findMovie(i)
-            if result:
-                for field in result:
-                    field['description'] = field['description'].replace('"','\\"')
-                    query = f"""insert into movies_cinemacity values 
-                        (NULL,
-                        "{field['title']}",
-                        "{field['original_lang']}",
-                        {field['dubbing']},
-                        {field['subtitles']},
-                        "{field['movie_type']}",
-                        "{field['genres']}",
-                        "{field['cast']}",
-                        "{field['director']}",
-                        STR_TO_DATE('{field['date']}','%d/%m/%Y %H:%i'),
-                        "{field['length']}",
-                        "{field['age']}",
-                        "{field['description']}",
-                        STR_TO_DATE('{field['premiere']}', '%d %M %Y'),
-                        {idx}
-                        )"""
-                    try:
-                        cursor.execute(query)
-                    except:
-                        connection.rollback()
-                        connection.close()
-                        print(f"Unsuccessfully added movies from day: {date_now}")
-                        raise Exception(f"Failed to insert query: {query} into database")
-
-        day = day + timedelta(days = 1)
+    for i in range(len(elements)):
+        result = findMovie(i)
+        if result:
+            for field in result:
+                field['description'] = field['description'].replace('"','\\"')
+                query = f"""insert into movies_cinemacity values 
+                    (NULL,
+                    "{field['title']}",
+                    "{field['original_lang']}",
+                    {field['dubbing']},
+                    {field['subtitles']},
+                    "{field['movie_type']}",
+                    "{field['genres']}",
+                    "{field['cast']}",
+                    "{field['director']}",
+                    STR_TO_DATE('{field['date']}','%d/%m/%Y %H:%i'),
+                    "{field['length']}",
+                    "{field['age']}",
+                    "{field['description']}",
+                    STR_TO_DATE('{field['premiere']}', '%d %M %Y'),
+                    {idx}
+                    )"""
+                try:
+                    cursor.execute(query)
+                except:
+                    connection.rollback()
+                    connection.close()
+                    print(f"Unsuccessfully added movies from day: {date_now}")
+                    raise Exception(f"Failed to insert query: {query} into database")
 
         connection.commit()
         print(f"Successfully added movies from day: {date_now}")
