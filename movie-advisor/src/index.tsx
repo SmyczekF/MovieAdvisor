@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import './Styles/Hero.css'
+import './Styles/Navbar.css'
 import App from './App';
 
 const root = ReactDOM.createRoot(

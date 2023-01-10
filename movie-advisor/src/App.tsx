@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Navbar from "./Components/Navbar";
+import Hero from "./Components/Hero";
 import Axios from "axios";
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
   return (
     <div className="App">
       <Navbar></Navbar>
+      <Hero></Hero>
     </div>
   );
 }

@@ -1,7 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap');
+
 *{
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+}
+html{
+    font-size: 10px;
+    font-family: 'Montserrat', sans-serif;
+    scroll-behavior: smooth;
+    background-color: #e1f4f5;
+    transition: 2s ease ;
+    transition-property: background-color, color;
+}
+a{
+    text-decoration: none;
+}
+.container{
+    min-height: 90vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+p{
+    color: black;
+    font-size: 1.4rem;
+    margin-top: 5px;
+    line-height: 2.5rem;
+    font-weight: 300px;
+    letter-spacing: .05rem;
+}
+.section-title{
+    font-size: 4rem;
+    font-weight: 300;
+    color: black;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: .3rem;
+    text-align: center;
+}
+.cta{
+    display: inline-block;
+    padding: 10px 30px;
+    color: white;
+    background-color: transparent;
+    border: 2px solid rgb(68, 118, 226);
+    font-size: 4rem;
+    text-transform: uppercase;
+    letter-spacing: .2rem;
+    margin-top: 90px;
+    transition: .5s ease ;
+    transition-property: background-color, color;
+}
+.cta:hover {
+    color: white;
+    background-color: rgb(68, 118, 226);
+}
+.brand h1{
+    font-size: 2rem;
+    color: white;
+    text-align: center;
 }
 
 :root{
